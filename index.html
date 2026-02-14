@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Learning Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        /* ========== HORIZONTAL SCROLL ========== */
+
+        .scroll-wrapper {
+            position: relative;
+        }
+
+        .scroll-row {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+        }
+
+        .scroll-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card {
+            width: 32%;
+            flex: 0 0 auto;
+            cursor: pointer;
+        }
+
+        .card video,
+        .card img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        /* PDF PREVIEW */
+        .pdf-preview {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .pdf-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* PDF TEXT */
+        .pdf-content {
+            padding-top: 10px;
+        }
+
+        .pdf-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .pdf-desc {
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* ========== ARROWS ========== */
+
+        .arrow {
+            position: absolute;
+            top: 35%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            font-size: 22px;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+            display: none;
+        }
+
+        .arrow-left { left: -10px; }
+        .arrow-right { right: -10px; }
+
+        /* ========== WATERMARK ========== */
+
+        #watermark {
+            position: fixed;
+            top: 40%;
+            left: 20%;
+            font-size: 45px;
+            color: rgba(0,0,0,0.06);
+            transform: rotate(-30deg);
+            pointer-events: none;
+            user-select: none;
+            z-index: 9999;
+        }
+
+        /* ========== PDF MODAL ========== */
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .modal iframe {
+            width: 80%;
+            height: 90%;
+            margin: 3% 10%;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .close {
+            position: absolute;
+            right: 30px;
+            top: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div id="watermark">vishnusharma789151@gmail.com</div>
+
+<h1>Premium Course Access</h1>
+
+<div class="container">
+
+    <!-- ========== VIDEO SECTION ========== -->
+    <div class="section">
+        <h2>📺 Video Lessons</h2>
+
+        <div class="scroll-wrapper">
+            <button class="arrow arrow-left" id="videoLeft" onclick="scrollLeftFunc('videoRow')">←</button>
+
+            <div class="scroll-row" id="videoRow">
+                <div class="card">
+                    <video controls controlsList="nodownload">
+                        <source src="/content/Copy of Q..mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="card">
+                    <video controls controlsList="nodownload">
+                        <source src="/content/Copy of Q..mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="card">
+                    <video controls controlsList="nodownload">
+                        <source src="/content/Copy of Q..mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="card">
+                    <video controls controlsList="nodownload">
+                        <source src="/content/Copy of Q..mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <button class="arrow arrow-right" id="videoRight" onclick="scrollRightFunc('videoRow')">→</button>
+        </div>
+    </div>
+
+    <!-- ========== IMAGE SECTION ========== -->
+    <div class="section">
+        <h2>🖼 Images</h2>
+
+        <div class="scroll-wrapper">
+            <button class="arrow arrow-left" id="imageLeft" onclick="scrollLeftFunc('imageRow')">←</button>
+
+            <div class="scroll-row" id="imageRow">
+                <div class="card"><img src="your-image.jpg"></div>
+                <div class="card"><img src="your-image.jpg"></div>
+                <div class="card"><img src="your-image.jpg"></div>
+                <div class="card"><img src="your-image.jpg"></div>
+            </div>
+
+            <button class="arrow arrow-right" id="imageRight" onclick="scrollRightFunc('imageRow')">→</button>
+        </div>
+    </div>
+
+    <!-- ========== PDF SECTION (REAL PDF PREVIEW) ========== -->
+    <div class="section">
+        <h2>📄 Notes</h2>
+
+        <div class="scroll-wrapper">
+            <button class="arrow arrow-left" id="pdfLeft" onclick="scrollLeftFunc('pdfRow')">←</button>
+
+            <div class="scroll-row" id="pdfRow">
+
+                <div class="card" onclick="openPDF('/content/sap pp.pdf')">
+                    <div class="pdf-preview">
+                        <iframe src="/content/sap pp.pdf#toolbar=0&navpanes=0&scrollbar=0&page=1"></iframe>
+                    </div>
+                    <div class="pdf-content">
+                        <div class="pdf-title">SAP PP Complete Notes</div>
+                        <div class="pdf-desc">Full detailed production planning notes.</div>
+                    </div>
+                </div>
+
+                <div class="card" onclick="openPDF('/content/sap pp.pdf')">
+                    <div class="pdf-preview">
+                        <iframe src="/content/sap pp.pdf#toolbar=0&navpanes=0&scrollbar=0&page=1"></iframe>
+                    </div>
+                    <div class="pdf-content">
+                        <div class="pdf-title">Advanced SAP Guide</div>
+                        <div class="pdf-desc">Advanced configuration concepts.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="arrow arrow-right" id="pdfRight" onclick="scrollRightFunc('pdfRow')">→</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- PDF MODAL -->
+<div id="pdfModal" class="modal">
+    <span class="close" onclick="closePDF()">✖</span>
+    <iframe id="pdfFrame"></iframe>
+</div>
+
+<script>
+
+function scrollLeftFunc(id) {
+    document.getElementById(id).scrollBy({ left: -400, behavior: 'smooth' });
+}
+
+function scrollRightFunc(id) {
+    document.getElementById(id).scrollBy({ left: 400, behavior: 'smooth' });
+}
+
+function checkArrows(rowId, leftId, rightId) {
+    const row = document.getElementById(rowId);
+    const left = document.getElementById(leftId);
+    const right = document.getElementById(rightId);
+
+    if (row.scrollWidth > row.clientWidth) {
+        left.style.display = "block";
+        right.style.display = "block";
+    } else {
+        left.style.display = "none";
+        right.style.display = "none";
+    }
+}
+
+window.onload = function() {
+    checkArrows('videoRow','videoLeft','videoRight');
+    checkArrows('imageRow','imageLeft','imageRight');
+    checkArrows('pdfRow','pdfLeft','pdfRight');
+};
+
+function openPDF(file) {
+    document.getElementById("pdfFrame").src = file;
+    document.getElementById("pdfModal").style.display = "block";
+}
+
+function closePDF() {
+    document.getElementById("pdfModal").style.display = "none";
+}
+
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+</script>
+
+</body>
+</html>
